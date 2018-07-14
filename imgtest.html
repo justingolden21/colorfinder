@@ -1,0 +1,105 @@
+<!doctype html>
+<!-- todo:
+make consoleText into divs with rgb, hex, copy button, delete button, names
+option to sort, search, and download saved colors
+ -->
+<html>
+<head>
+	<title>Color Finder</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<style>
+		* {
+			text-align: center !important;
+		}
+		#preview {
+			border-radius: 50%;
+		}
+		#consoleText, #clear, #input, #output {
+			width: 60%;
+			margin: 5px auto !important;
+		}
+		#consoleText {
+			cursor: text;
+		}
+		::-moz-selection {
+	  		background: #ccc;
+		}
+		::selection {
+		  	background: #ccc;
+		}
+	</style>
+</head>
+<body>
+<h3>Color Finder</h3>
+<h5>Select your image below, then</h5>
+<h5>Hover to preview a color, right click to save it below, and left click to save and copy it</h5>
+<input id="input" type="file" class="form-control">
+<textarea id="output" rows="2" class="form-control"></textarea>
+<canvas id="preview" width="50" height="50"></canvas><br>
+<canvas id="canvas" width="0"></canvas><br>
+<h5>Saved Colors:</h5>
+<textarea disabled id="consoleText" rows="5" class="form-control"></textarea><br>
+<button id="clear" onclick="clearConsole()" class="form-control">Clear Saved Colors</button>
+
+<script>
+let canvas, ctx, outputP, preview, previewCtx, consoleText;
+
+window.onload = function() {
+	canvas = document.getElementById("canvas");
+	preview = document.getElementById("preview");
+	output = document.getElementById("output");
+	consoleText = document.getElementById("consoleText");
+	ctx = canvas.getContext("2d");
+	previewCtx = preview.getContext("2d");
+
+	document.getElementById("input").addEventListener("change", handleFile);
+	canvas.addEventListener("mousemove", previewColor);
+	canvas.addEventListener("contextmenu", logColor);
+	canvas.addEventListener("click", copyColor);
+}
+
+function previewColor(evt) { //move
+	let pixelData = ctx.getImageData(evt.offsetX, evt.offsetY, 1, 1).data;
+	let hex = rgbToHex(pixelData);
+	output.innerHTML = 'R: ' + pixelData[0] + ' G: ' + pixelData[1] + ' B: ' + pixelData[2] + 
+	' A: ' + pixelData[3] + '\nHex: ' + hex;
+	output.select();
+	previewCtx.fillStyle = hex;
+	previewCtx.fillRect(0,0,preview.width,preview.height);
+	return hex;
+}
+
+function logColor(evt) { //right click
+	evt.preventDefault();
+	consoleText.innerHTML += previewColor(evt) + '\n';
+}
+
+function copyColor(evt) { //left click
+	logColor(evt);
+
+	document.execCommand("copy");
+}
+
+function handleFile(evt) {
+	let img = new Image;
+	img.onload = function() {
+		canvas.width = img.width;
+		canvas.height = img.height;
+		ctx.drawImage(img, 0, 0, img.width, img.height);
+	}
+	if(evt.target.files[0]) {
+		img.src = URL.createObjectURL(evt.target.files[0]);		
+	}
+}
+
+function rgbToHex(rgb) {
+    return '#' + ( (rgb[0] << 16) | (rgb[1] << 8) | rgb[2] ).toString(16).toUpperCase();
+}
+
+function clearConsole() {
+	consoleText.innerHTML = '';
+}
+
+</script>
+</body>
+</html>
