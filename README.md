@@ -1,6 +1,8 @@
 # Colorfinder
 
-## Find and save colors from any image
+https://justingolden21.github.io/colorfinder/
+
+### Find and save colors from any image
 
 Select your image then:
 
@@ -9,3 +11,11 @@ Select your image then:
 - Right click to save it below
 
 - Left click to save and copy it
+
+### About
+
+By Justin Golden
+
+https://justingolden21.github.io
+
+justingolden@rgbstudios.org
