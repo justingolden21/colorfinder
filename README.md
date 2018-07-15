@@ -1,11 +1,11 @@
 # Colorfinder
 
-find and save colors from any image
+## Find and save colors from any image
 
 Select your image then:
 
-- hover to preview a color
+- Hover to preview a color
 
-- right click to save it below
+- Right click to save it below
 
-- left click to save and copy it
+- Left click to save and copy it
